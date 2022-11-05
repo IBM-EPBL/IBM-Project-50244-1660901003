@@ -1,1 +1,45 @@
 
+<html>
+    <head>
+        <title>HTML form</title>
+        <link href="style.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <h1>HTML FORM</h1>
+        <br>
+        <div>
+        <p>Enter your name</p>
+        <input type="text" placeholder="enter your name" size="20"/>
+        <br>
+        <p>Enter your age</p>
+        <input type="text" placeholder="enter your age" size="20"/>
+        <br>
+        <p>Enter your address</p>
+        <textarea rows="4" cols="70"></textarea>
+        <br>
+        <p>DEPARTMENT</p>
+        <input type="radio">CSE</input><br>
+        <input type="radio">IT</input><br>
+        <input type="radio">MECH</input><br>
+        <input type="radio">MCA</input><br>
+        <input type="radio">CIVIL</input><br>
+        <br>
+        <p>Gender</p>
+        <select>
+            <option>select</option>
+            <option>male</option>
+            <option>female</option>
+            <option>Others</option>
+        </select>
+        <br>
+        <p>PASSWORD</p>
+        <input type="password"/>
+        <br>
+        <p>Interested domains</p>
+        <input type="checkbox">ARTIFICIAL INTELLIGENCE</input><br>
+        <input type="checkbox">WEB DEVELOPEMENT</input><br>
+        <input type="checkbox">CLOUD COMPUTING</input>
+        </div>
+
+    </body>
+</html>
