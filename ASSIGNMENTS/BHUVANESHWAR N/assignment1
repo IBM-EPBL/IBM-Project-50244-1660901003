@@ -15,7 +15,7 @@
         <input type="text" placeholder="enter your age" size="20"/>
         <br>
         <p>Enter your address</p>
-        <textarea rows="4" cols="70"></textarea>
+        <textarea rows="4" cols="70"></textarea>*
         <br>
         <p>DEPARTMENT</p>
         <input type="radio">CSE</input><br>
