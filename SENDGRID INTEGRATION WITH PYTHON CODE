@@ -1,0 +1,76 @@
+from flask import Flask,render_template,request,url_for,redirect,session
+from clarifai_grpc.grpc.api import service_pb2,resources_pb2
+from clarifai_grpc.grpc.api.status import status_code_pb2
+import ibm_db
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+import requests
+from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
+from clarifai_grpc.grpc.api import service_pb2_grpc
+stub = service_pb2_grpc.V2Stub(ClarifaiChannel.get_grpc_channel())
+YOUR_CLARIFAI_API_KEY="747efb7b11334fdab65de5ba402969dd"
+YOUR_APPLICATION_ID="nutriaux"
+app=Flask(__name__)
+app.secret_key='a'
+try:
+ conn=ibm_db.connect("DATABASE=bludb;HOSTNAME=ba99a9e6-d59e-4883-8fc0-
+d6a8c9f7a08f.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=31321;SECURITY=SSL;SSLSer
+verCertificate=DigiCertGlobalRootCA.crt;UID=gkr16989;PWD=WvN7xr79Kp6YfdL7","","")
+except:
+ print("Unable to connect: ",ibm_db.conn_error())
+
+@app.route("/")
+def home():
+ session['status_msg']=' '
+
+ return render_template('Home.html')
+@app.route("/reg")
+def reg():
+ return render_template('Registration.html')
+@app.route("/register",methods=["POST","GET"])
+def register():
+ if request.method == 'POST' :
+ firstName = request.form['firstName']
+ lastName = request.form['lastName']
+
+ session['email'] = request.form['email']
+ phoneNumber = request.form['phoneNumber']
+ password = request.form['password']
+ sql = "SELECT * FROM registration WHERE EMAIL_ID=?"
+ stmt = ibm_db.prepare(conn, sql)
+ ibm_db.bind_param(stmt,1,session['email'])
+ ibm_db.execute(stmt)
+ account = ibm_db.fetch_assoc(stmt)
+ print(account)
+ message =
+Mail(from_email='nutriaux04@gmail.com',to_emails=session['email'],subject="NutriAux -
+Registration",html_content='<b>NutriAux welcomes you</b><br/><p>Your account has been
+registered successfully</p>')
+ try:
+ #USe the API key given in this link for security purposes -
+https://docs.google.com/document/d/1xrF_chjAgbNJOCcsrGuVXtKWexPb5Ff5vmLpkscbgbU/edit?us
+p=sharing
+ #sg=SendGridAPIClient('##USE THE API GIVEN IN THE ABOVE LINK##')
+ response=sg.send(message)
+ print(response.status_code)
+ print(response.body)
+ print(response.headers)
+ except Exception as e:
+ print(e)
+ if account:
+ session['status_msg']= 'Account already exists ! Kindly login'
+ return redirect(url_for('login'))
+ else :
+ insert_sql = "INSERT INTO registration VALUES (?,?,?,?,?)"
+ prep_stmt = ibm_db.prepare(conn, insert_sql)
+ ibm_db.bind_param(prep_stmt, 1, firstName)
+ ibm_db.bind_param(prep_stmt, 2, lastName)
+ ibm_db.bind_param(prep_stmt, 3, session['email'])
+ ibm_db.bind_param(prep_stmt, 4, phoneNumber)
+ ibm_db.bind_param(prep_stmt, 5, password)
+ ibm_db.execute(prep_stmt)
+ print('You have successfully registered !')
+ return redirect(url_for('personaldetails'))
+if __name__ == '__main__':
+ app.run(debug=True)
