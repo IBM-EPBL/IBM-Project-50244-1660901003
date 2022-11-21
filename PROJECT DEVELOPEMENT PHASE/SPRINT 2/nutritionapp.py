@@ -32,7 +32,7 @@ def register():
         email = request.form['email']
         phoneNumber = request.form['phoneNumber']
         password = request.form['password']
-        message = Mail(from_email='nutriaux04@gmail.com',to_emails=email,subject="NutriAux - Registration",html_content='<b>NutriAux welocmes you</b><br/><p>Your account has been registered successfully</p>')
+        message = Mail(from_email='bhuvaneshwarncse2019@citchennai.net',to_emails=email,subject="Registration",html_content='<b>NutritionApp welocmes you</b><br/><p>Your account has been registered successfully</p>')
         try:
             sg=SendGridAPIClient('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')
             response=sg.send(message)
