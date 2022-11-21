@@ -38,7 +38,7 @@ def register():
         ibm_db.execute(stmt)
         account = ibm_db.fetch_assoc(stmt)
         print(account)
-        message = Mail(from_email='nutriaux04@gmail.com',to_emails=session['email'],subject="NutriAux - Registration",html_content='<b>NutriAux welcomes you</b><br/><p>Your account has been registered successfully</p>')
+        message = Mail(from_email='bhuvaneshwarncse2019@citchennai.net',to_emails=session['email'],subject="Registration",html_content='<b>NutritionApp welcomes you</b><br/><p>Your account has been registered successfully</p>')
         try:
             sg=SendGridAPIClient('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')
             response=sg.send(message)
