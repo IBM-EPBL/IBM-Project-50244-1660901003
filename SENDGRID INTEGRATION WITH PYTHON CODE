@@ -44,8 +44,8 @@ def register():
  account = ibm_db.fetch_assoc(stmt)
  print(account)
  message =
-Mail(from_email='nutriaux04@gmail.com',to_emails=session['email'],subject="NutriAux -
-Registration",html_content='<b>NutriAux welcomes you</b><br/><p>Your account has been
+Mail(from_email='bhuvaneshwarncse2019@gmail.com',to_emails=session['email'],subject="NutriAux -
+Registration",html_content='<b>NutritionApp welcomes you</b><br/><p>Your account has been
 registered successfully</p>')
  try:
  #USe the API key given in this link for security purposes -
