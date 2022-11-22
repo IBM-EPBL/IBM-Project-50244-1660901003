@@ -1,4 +1,4 @@
-rom flask import Flask,render_template,request,url_for,redirect,session
+from flask import Flask,render_template,request,url_for,redirect,session
 import ibm_db
 import os
 from sendgrid import SendGridAPIClient
@@ -8,7 +8,7 @@ import requests
 app=Flask(__name__)
 app.secret_key='a'
 try:
-    conn=ibm_db.connect("DATABASE=bludb;HOSTNAME=ba99a9e6-d59e-4883-8fc0-d6a8c9f7a08f.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=31321;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=gkr16989;PWD=WvN7xr79Kp6YfdL7","","")
+    conn=ibm_db.connect("DATABASE=bludb;HOSTNAME=6667d8e9-9d4d-4ccb-ba32-21da3bb5aafc.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=30376;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=crq67061;PWD=ICkbklM0P6eeoVQk","","")
 except:
     print("Unable to connect: ",ibm_db.conn_error())
   
@@ -38,9 +38,9 @@ def register():
         ibm_db.execute(stmt)
         account = ibm_db.fetch_assoc(stmt)
         print(account)
-        message = Mail(from_email='bhuvaneshwarncse2019@citchennai.net',to_emails=session['email'],subject="Registration",html_content='<b>NutritionApp welcomes you</b><br/><p>Your account has been registered successfully</p>')
+        message = Mail(from_email='bhuvaneshwarncse2019@citchennai.net',to_emails=session['email'],subject="NutriAux - Registration",html_content='<b>NutriAux welcomes you</b><br/><p>Your account has been registered successfully</p>')
         try:
-            sg=SendGridAPIClient('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')
+            sg=SendGridAPIClient('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')
             response=sg.send(message)
             print(response.status_code)
             print(response.body)
@@ -53,7 +53,7 @@ def register():
             
             
             session['status_msg']= 'Account already exists ! Kindly login'
-            return redirect(url_for('login'))
+            return redirect('login.html')
         else :
             insert_sql = "INSERT INTO registration VALUES (?,?,?,?,?)"
             prep_stmt = ibm_db.prepare(conn, insert_sql)
@@ -64,7 +64,7 @@ def register():
             ibm_db.bind_param(prep_stmt, 5, password)
             ibm_db.execute(prep_stmt)
         print('You have successfully registered !')
-        return redirect(url_for('personaldetails'))
+        return redirect('personaldetails.html')
     
 
 
@@ -123,7 +123,7 @@ def addpersonaldetails():
         ibm_db.bind_param(prep_stmt,6,str(totalCalories))
         ibm_db.bind_param(prep_stmt,7,str(BMI))
         ibm_db.execute(prep_stmt)
-    return redirect(url_for('login'))
+    return redirect('login.html')
 
 
 @app.route("/login")
@@ -157,7 +157,7 @@ def verify():
         global BMI
         BMI=data[3]
         BMI=BMI[0:4]
-        return redirect((url_for('dashboard')))
+        return redirect('dashboard.html')
     print("Wrong password" , session['email'],password)
     return render_template("login.html",message="Incorrect Email ID or Password! Try again")
 
@@ -210,7 +210,7 @@ def addhistory():
         ibm_db.bind_param(prep_stmt,4,calories)
         ibm_db.execute(prep_stmt)
     
-    return redirect(url_for('history'))
+    return redirect('History.html')
         
 
 @app.route("/support")
@@ -218,4 +218,4 @@ def support():
     return render_template("support.html")
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug='True')
